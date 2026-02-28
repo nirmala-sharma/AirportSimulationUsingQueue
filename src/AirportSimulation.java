@@ -4,7 +4,7 @@ public class AirportSimulation {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Amount of minutes to land: ");
+        System.out.print("Amount of minutes to land: ");
         int LAND_TIME = sc.nextInt();
 
         System.out.print("Amount of minutes to take off: ");
@@ -37,7 +37,7 @@ public class AirportSimulation {
         int totallandingWait = 0;
         int totalTakeOfWait = 0;
 
-        int runwayRemaining = 0;    // minutes left on current runway operation
+        int runwayRemaining = 0;    // minutes left for current operation
         int runwayMode = 0;        // 0=idle, 1=landing, 2=takeoff
         Random rand = new Random();
 
@@ -61,6 +61,8 @@ public class AirportSimulation {
 
             // If runway is free, start a new operation (landing priority)
             if (runwayRemaining == 0) {
+
+                // Remove crashed landing planes
                 while (!LandingQueue.isEmpty() && (t - LandingQueue.peek()) > MAX_AIRTIME) {
                  LandingQueue.poll();
                  totalCrashed++;
@@ -82,6 +84,7 @@ public class AirportSimulation {
                 }
             }
         }
+        // Final crash check for remaining landing planes
         while (!LandingQueue.isEmpty()) {
           int enterTime = LandingQueue.poll();
           if ((TOTAL_SIM_MIN - enterTime) > MAX_AIRTIME) totalCrashed++;
